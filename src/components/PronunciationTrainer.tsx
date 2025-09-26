@@ -5,6 +5,7 @@ import AudioRecorder from "./AudioRecorder";
 import PronunciationFeedback from "./PronunciationFeedback";
 import SessionHistory from "./SessionHistory";
 import GameStats from "./GameStats";
+import { calculateOverallAccuracy, analyzePronunciationIssues, getPronunciationTips } from "../utils/PhonemeUtils";
 
 interface PracticeAttempt {
     id: string;
@@ -17,7 +18,10 @@ interface PracticeAttempt {
         expected: string;
         actual: string;
         position: number;
+        accuracy?: number;
+        type?: string;
     }>;
+    pronunciationTips?: string[];
     audioBlob?: Blob;
 }
 
@@ -97,14 +101,19 @@ const PronunciationTrainer: React.FC<PronunciationTrainerProps> = ({
                 .join("")
                 .trim() || "";
 
-            // Create new attempt with phoneme comparison
+            // Create new attempt with enhanced phoneme analysis
+            const pronunciationIssues = analyzePronunciationIssues(currentPassage, transcribedText);
+            const accuracyScore = calculateOverallAccuracy(currentPassage, transcribedText);
+            const tips = getPronunciationTips(pronunciationIssues);
+            
             const newAttempt: PracticeAttempt = {
                 id: Date.now().toString(),
                 passageText: currentPassage,
                 transcription: transcribedText,
-                accuracyScore: calculateAccuracy(currentPassage, transcribedText),
+                accuracyScore,
                 timestamp: Date.now(),
-                mispronunciations: findMispronunciations(currentPassage, transcribedText),
+                mispronunciations: pronunciationIssues,
+                pronunciationTips: tips,
             };
 
             setAttempts((prev) => [newAttempt, ...prev]);
@@ -113,41 +122,7 @@ const PronunciationTrainer: React.FC<PronunciationTrainerProps> = ({
         }
     }, [transcriber.output, currentPassage, updateGameState]);
 
-    const calculateAccuracy = (expected: string, actual: string): number => {
-        // Simple word-based accuracy calculation
-        const expectedWords = expected.toLowerCase().split(/\s+/);
-        const actualWords = actual.toLowerCase().split(/\s+/);
-        
-        let matches = 0;
-        const maxLength = Math.max(expectedWords.length, actualWords.length);
-        
-        for (let i = 0; i < Math.min(expectedWords.length, actualWords.length); i++) {
-            if (expectedWords[i] === actualWords[i]) {
-                matches++;
-            }
-        }
-        
-        return Math.round((matches / maxLength) * 100);
-    };
 
-    const findMispronunciations = (expected: string, actual: string) => {
-        const expectedWords = expected.toLowerCase().split(/\s+/);
-        const actualWords = actual.toLowerCase().split(/\s+/);
-        const mispronunciations = [];
-
-        for (let i = 0; i < Math.min(expectedWords.length, actualWords.length); i++) {
-            if (expectedWords[i] !== actualWords[i]) {
-                mispronunciations.push({
-                    word: expectedWords[i],
-                    expected: expectedWords[i],
-                    actual: actualWords[i] || "",
-                    position: i,
-                });
-            }
-        }
-
-        return mispronunciations;
-    };
 
     return (
         <div className="w-full max-w-6xl mx-auto p-6 space-y-6">

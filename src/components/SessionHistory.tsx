@@ -5,6 +5,8 @@ interface Mispronunciation {
     expected: string;
     actual: string;
     position: number;
+    accuracy?: number;
+    type?: string;
 }
 
 interface PracticeAttempt {
@@ -14,6 +16,7 @@ interface PracticeAttempt {
     accuracyScore: number;
     timestamp: number;
     mispronunciations: Mispronunciation[];
+    pronunciationTips?: string[];
     audioBlob?: Blob;
 }
 

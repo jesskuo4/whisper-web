@@ -5,6 +5,8 @@ interface Mispronunciation {
     expected: string;
     actual: string;
     position: number;
+    accuracy?: number;
+    type?: string;
 }
 
 interface PracticeAttempt {
@@ -14,6 +16,7 @@ interface PracticeAttempt {
     accuracyScore: number;
     timestamp: number;
     mispronunciations: Mispronunciation[];
+    pronunciationTips?: string[];
     audioBlob?: Blob;
 }
 
@@ -233,6 +236,25 @@ const PronunciationFeedback: React.FC<PronunciationFeedbackProps> = ({
                             ))}
                         </div>
                     )}
+                </div>
+            )}
+
+            {/* Pronunciation Tips */}
+            {attempt.pronunciationTips && attempt.pronunciationTips.length > 0 && (
+                <div className="mb-6">
+                    <h4 className="text-lg font-semibold mb-3 text-slate-900">
+                        💡 Personalized Tips
+                    </h4>
+                    <div className="space-y-2">
+                        {attempt.pronunciationTips.map((tip, index) => (
+                            <div
+                                key={index}
+                                className="p-3 bg-blue-50 border border-blue-200 rounded-lg"
+                            >
+                                <p className="text-blue-800 text-sm">{tip}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             )}
 
