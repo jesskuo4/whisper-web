@@ -46,7 +46,7 @@ const DIFFICULTY_PATTERNS = {
     // Vowel confusion
     'vowel_confusion': {
         'sheep': 'ship', 'ship': 'sheep',
-        'beach': 'bitch', 'bitch': 'beach',
+        'reach': 'rich', 'rich': 'reach',
         'full': 'fool', 'fool': 'full'
     }
 };
@@ -245,10 +245,19 @@ export function calculateOverallAccuracy(expected: string, actual: string): numb
     return Math.round(totalScore / maxWords);
 }
 
+interface PronunciationIssue {
+    word: string;
+    expected: string;
+    actual: string;
+    position: number;
+    accuracy: number;
+    type: string;
+}
+
 /**
  * Get pronunciation tips based on common errors
  */
-export function getPronunciationTips(issues: any[]): string[] {
+export function getPronunciationTips(issues: PronunciationIssue[]): string[] {
     const tips = new Set<string>();
     
     for (const issue of issues) {

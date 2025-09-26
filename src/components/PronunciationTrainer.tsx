@@ -5,6 +5,7 @@ import AudioRecorder from "./AudioRecorder";
 import PronunciationFeedback from "./PronunciationFeedback";
 import SessionHistory from "./SessionHistory";
 import GameStats from "./GameStats";
+import DemoMode from "./DemoMode";
 import { calculateOverallAccuracy, analyzePronunciationIssues, getPronunciationTips } from "../utils/PhonemeUtils";
 
 interface PracticeAttempt {
@@ -93,6 +94,12 @@ const PronunciationTrainer: React.FC<PronunciationTrainerProps> = ({
         [currentPassage, transcriber],
     );
 
+    const handleDemoResult = useCallback((demoResult: PracticeAttempt) => {
+        setAttempts((prev) => [demoResult, ...prev]);
+        setCurrentFeedback(demoResult);
+        updateGameState(demoResult);
+    }, [updateGameState]);
+
     // Listen for transcription results
     React.useEffect(() => {
         if (transcriber.output && currentPassage) {
@@ -149,6 +156,11 @@ const PronunciationTrainer: React.FC<PronunciationTrainerProps> = ({
                             <div className="mb-4 p-4 bg-slate-50 rounded-lg">
                                 <p className="text-lg leading-relaxed">{currentPassage}</p>
                             </div>
+                            
+                            <DemoMode 
+                                currentPassage={currentPassage}
+                                onDemoResult={handleDemoResult}
+                            />
                             
                             <AudioRecorder
                                 onRecordingComplete={handleRecordingComplete}
