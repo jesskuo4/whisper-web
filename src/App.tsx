@@ -1,27 +1,19 @@
-import { AudioManager } from "./components/AudioManager";
-import Transcript from "./components/Transcript";
+import PronunciationTrainer from "./components/PronunciationTrainer";
 import { useTranscriber } from "./hooks/useTranscriber";
 
 function App() {
     const transcriber = useTranscriber();
 
     return (
-        <div className='flex justify-center items-center min-h-screen'>
-            <div className='container flex flex-col justify-center items-center'>
-                <h1 className='text-5xl font-extrabold tracking-tight text-slate-900 sm:text-7xl text-center'>
-                    Whisper Web
-                </h1>
-                <h2 className='mt-3 mb-5 px-4 text-center text-1xl font-semibold tracking-tight text-slate-900 sm:text-2xl'>
-                    ML-powered speech recognition directly in your browser
-                </h2>
-                <AudioManager transcriber={transcriber} />
-                <Transcript transcribedData={transcriber.output} />
+        <div className='min-h-screen bg-slate-50'>
+            <div className='container mx-auto py-8'>
+                <PronunciationTrainer transcriber={transcriber} />
             </div>
 
-            <div className='absolute bottom-4'>
+            <div className='text-center py-4 text-slate-600'>
                 Made with{" "}
                 <a
-                    className='underline'
+                    className='underline hover:text-slate-800'
                     href='https://github.com/xenova/transformers.js'
                 >
                     🤗 Transformers.js
