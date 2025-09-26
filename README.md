@@ -2,7 +2,9 @@
 
 ML-powered speech recognition directly in your browser! Built with [🤗 Transformers.js](https://github.com/xenova/transformers.js).
 
-Check out the demo site [here](https://huggingface.co/spaces/Xenova/whisper-web). 
+🌐 **Live Demo**: [https://jesskuo4.github.io/whisper-web/](https://jesskuo4.github.io/whisper-web/)
+
+Check out the original demo site [here](https://huggingface.co/spaces/Xenova/whisper-web). 
 
 > [!IMPORTANT]  
 > Experimental WebGPU support has been added to [this branch](https://github.com/xenova/whisper-web/tree/experimental-webgpu) ([demo](https://huggingface.co/spaces/Xenova/whisper-webgpu)), if you'd like to run with GPU acceleration!
@@ -14,7 +16,7 @@ https://github.com/xenova/whisper-web/assets/26504141/fb170d84-9678-41b5-9248-a1
 1. Clone the repo and install dependencies:
 
     ```bash
-    git clone https://github.com/xenova/whisper-web.git
+    git clone https://github.com/jesskuo4/whisper-web.git
     cd whisper-web
     npm install
     ```
@@ -28,3 +30,13 @@ https://github.com/xenova/whisper-web/assets/26504141/fb170d84-9678-41b5-9248-a1
     > Check out [this issue](https://github.com/xenova/whisper-web/issues/8) for more details.
 
 3. Open the link (e.g., [http://localhost:5173/](http://localhost:5173/)) in your browser.
+
+## Deployment
+
+This application is automatically deployed to GitHub Pages via GitHub Actions whenever changes are pushed to the main branch. The deployment workflow:
+
+1. Builds the application using `npm run build`
+2. Uploads the built files from the `dist/` folder to GitHub Pages
+3. Makes the application available at [https://jesskuo4.github.io/whisper-web/](https://jesskuo4.github.io/whisper-web/)
+
+The deployment is configured with the proper base path (`/whisper-web/`) to work correctly with GitHub Pages.
